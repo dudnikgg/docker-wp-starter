@@ -1,0 +1,86 @@
+networks:
+  wp-back:
+    external: true
+
+services:
+  caddy:
+    image: caddy:latest
+    restart: unless-stopped
+    networks:
+      - wp-back
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+      - .docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+
+      # project files
+      - htmldata:/srv/htmldata
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - wp-back
+    restart: always
+
+  wp-fpm:
+    image: wordpress:6-fpm
+    restart: always
+    networks:
+      - wp-back
+    links:
+      - db
+    depends_on:
+      - caddy
+      - db
+    volumes:
+      - htmldata:/var/www/html
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1M"
+        max-file: "10"
+
+  db:
+    image: mariadb:latest
+    restart: always
+    networks:
+      - wp-back
+    volumes:
+      - dbdata:/var/lib/mysql
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1M"
+        max-file: "10"
+
+  adminer:
+    image: adminer
+    networks:
+      - wp-back
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  htmldata:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./public
+      o: bind
+
+  dbdata:
+  caddy-data:
+  caddy-config:
