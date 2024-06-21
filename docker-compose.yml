@@ -29,17 +29,17 @@ services:
     restart: always
 
   wp-fpm:
-    image: wordpress:6-fpm
+    image: wordpress:6-fpm-alpine
     restart: always
     networks:
       - wp-back
-    links:
-      - db
     depends_on:
       - caddy
       - db
     volumes:
       - htmldata:/var/www/html
+      - wp-theme:/var/www/html/wp-content/themes
+      - wp-plugins:/var/www/html/wp-content/plugins
     env_file:
       - .env
     logging:
@@ -47,6 +47,20 @@ services:
       options:
         max-size: "1M"
         max-file: "10"
+
+  wp-cli:
+    image: wordpress:cli
+    user: 33:33
+    networks:
+      - wp-back
+    volumes:
+      - htmldata:/var/www/html
+      - wp-theme:/var/www/html/wp-content/themes
+      - wp-plugins:/var/www/html/wp-content/plugins
+      - wp-uploads:/var/www/html/wp-content/uploads
+      - db-dump:/var/www/db-dump/
+    env_file:
+      - .env
 
   db:
     image: mariadb:latest
@@ -74,13 +88,34 @@ services:
       - 8080:8080
 
 volumes:
-  htmldata:
+  wp-theme:
     driver: local
     driver_opts:
       type: none
-      device: ./public
+      device: ${PWD}/wp-theme
       o: bind
 
+  wp-plugins:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/wp-plugins
+      o: bind
+
+  wp-uploads:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/wp-uploads
+      o: bind
+
+  htmldata:
   dbdata:
   caddy-data:
   caddy-config:
+  db-dump:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/db-dump
+      o: bind
