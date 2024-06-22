@@ -20,7 +20,10 @@ services:
       - .docker/caddy/Caddyfile:/etc/caddy/Caddyfile
 
       # project files
-      - htmldata:/srv/htmldata
+      - wp-data:/srv/wp-data
+      - wp-theme:/srv/wp-data/wp-content/themes
+      - wp-plugins:/srv/wp-data/wp-content/plugins
+      - wp-uploads:/srv/wp-data/wp-content/uploads
 
   redis:
     image: redis:7-alpine
@@ -37,9 +40,10 @@ services:
       - caddy
       - db
     volumes:
-      - htmldata:/var/www/html
+      - wp-data:/var/www/html
       - wp-theme:/var/www/html/wp-content/themes
       - wp-plugins:/var/www/html/wp-content/plugins
+      - wp-uploads:/var/www/html/wp-content/uploads
     env_file:
       - .env
     logging:
@@ -54,7 +58,7 @@ services:
     networks:
       - wp-back
     volumes:
-      - htmldata:/var/www/html
+      - wp-data:/var/www/html
       - wp-theme:/var/www/html/wp-content/themes
       - wp-plugins:/var/www/html/wp-content/plugins
       - wp-uploads:/var/www/html/wp-content/uploads
@@ -109,7 +113,7 @@ volumes:
       device: ${PWD}/wp-uploads
       o: bind
 
-  htmldata:
+  wp-data:
   dbdata:
   caddy-data:
   caddy-config:
