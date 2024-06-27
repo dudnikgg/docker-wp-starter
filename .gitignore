@@ -1,7 +1,19 @@
 .DS_Store
 .env
 
-wp-theme
-wp-plugins
-wp-uploads
+# Ignore all contents within the wp-* directories
+wp-theme/*
+wp-plugins/*
+wp-uploads/*
+
+# But do not ignore the wp-* directories themselfs
+!wp-theme/
+!wp-plugins/
+!wp-uploads/
+
+# Allow a placeholder file to keep the directories tracked
+!wp-theme/.gitkeep
+!wp-plugins/.gitkeep
+!wp-uploads/.gitkeep
+
 db-dump
