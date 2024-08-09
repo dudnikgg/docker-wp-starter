@@ -1,6 +1,9 @@
 .DS_Store
 .env
 
+vendor
+node_modules
+
 # Ignore all contents within the wp-* directories
 wp-theme/*
 wp-plugins/*
