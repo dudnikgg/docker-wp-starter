@@ -136,6 +136,7 @@ volumes:
   dbdata:
   caddy-data:
   caddy-config:
+  mailpit-data:
   db-dump:
     driver: local
     driver_opts:
