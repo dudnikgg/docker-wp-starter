@@ -32,18 +32,24 @@ services:
     restart: always
 
   wp-fpm:
-    image: wordpress:6-fpm-alpine
-    restart: always
+    build:
+      context: .
+      dockerfile: .docker/php-fpm/Dockerfile
+    restart: unless-stopped
     networks:
       - wp-back
     depends_on:
       - caddy
       - db
+      - mailpit
     volumes:
       - wp-data:/var/www/html
       - wp-theme:/var/www/html/wp-content/themes
       - wp-plugins:/var/www/html/wp-content/plugins
       - wp-uploads:/var/www/html/wp-content/uploads
+
+      - .docker/php-fpm/msmtprc:/etc/msmtprc
+
     env_file:
       - .env
     logging:
@@ -54,7 +60,7 @@ services:
 
   wp-cli:
     image: wordpress:cli
-    user: 33:33
+    user: ${PUID}:${PGID}
     networks:
       - wp-back
     volumes:
@@ -66,9 +72,22 @@ services:
     env_file:
       - .env
 
+  mailpit:
+    image: axllent/mailpit
+    restart: unless-stopped
+    networks:
+      - wp-back
+    volumes:
+      - mailpit-data:/data
+    env_file:
+      - .env
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
   db:
     image: mariadb:latest
-    restart: always
+    restart: unless-stopped
     networks:
       - wp-back
     volumes:

@@ -1,0 +1,57 @@
+{
+  "name": "dudnikgg/project-name",
+  "description": "project-name project",
+  "type": "project",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:wordpress-premium/advanced-custom-fields-pro.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:{git-user-name}/{project-name}.git"
+    }
+  ],
+  "authors": [
+    {
+      "name": "dudnikgg",
+      "email": "dudnik.gg@gmail.com"
+    }
+  ],
+  "require": {
+    "wpackagist-plugin/wordpress-seo": "^22.0",
+    "wpackagist-plugin/wps-hide-login": "^1.9",
+    "wpackagist-plugin/wp-migrate-db": "^2.6",
+    "wordpress-premium/advanced-custom-fields-pro": "dev-master",
+    "{git-user-name/project-name}": "dev-dev",
+    "wpackagist-plugin/contact-form-7": "^5.9"
+  },
+  "scripts": {
+    "fetch-db-from-dev": "./scripts/fetch-db-from-dev.sh",
+    "fetch-uploads-from-dev": "./scripts/fetch-uploads-from-dev.sh",
+    "import-db": "./scripts/import-db.sh"
+  },
+  "extra": {
+    "installer-paths": {
+      "./wp-plugins/{$name}": [
+        "type:wordpress-plugin"
+      ],
+      "./wp-theme/{$name}": [
+        "type:wordpress-theme"
+      ]
+    }
+  },
+  "config": {
+    "preferred-install": {
+      "{git-user-name/project-name}": "source",
+      "*": "dist"
+    },
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  }
+}
