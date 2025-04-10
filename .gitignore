@@ -1,23 +1,24 @@
 .DS_Store
 .env
+.idea
 
 vendor
 node_modules
 
 # Ignore all contents within the wp-* directories
-wp-theme/*
+wp-themes/*
 wp-plugins/*
 wp-uploads/*
 db-dump/*
 
 # But do not ignore the wp-* directories themselfs
-!wp-theme/
+!wp-themes/
 !wp-plugins/
 !wp-uploads/
 !db-dump/
 
 # Allow a placeholder file to keep the directories tracked
-!wp-theme/.gitkeep
+!wp-themes/.gitkeep
 !wp-plugins/.gitkeep
 !wp-uploads/.gitkeep
 !db-dump/.gitkeep

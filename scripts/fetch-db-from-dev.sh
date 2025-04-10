@@ -1,8 +1,9 @@
 #!/bin/bash
 
-Color_off='\033[0m' # Text Reset
-Red='\033[0;31m' # Red
-Green='\033[0;32m' # Green
+Color_off=$(tput sgr0) # Text Reset
+Red=$'\e[0;31m' # Red
+Yellow=$'\e[0;33m' # Yellow
+Green=$'\e[0;32m' # Green
 
 # Source the .env file
 source .env
